@@ -18,7 +18,7 @@ using IP_pool = std::vector<IP_addr>;
 
 std::ostream& operator << (std::ostream& os, const IP_addr& ip_addr) {
 	for_each(ip_addr | view::transform([](const Byte& i) {return std::to_string(i); })
-					 | view::intersperse(","), 
+					 | view::intersperse("."), 
 		[&os](auto ip_part) {
 		os << ip_part; });
 	return os;
@@ -121,7 +121,7 @@ int main()
 
 	sort(ip_adrr, std::greater<IP_addr>());
 	for_each(ip_adrr, [](IP_addr c) { std::cout << c << '\n'; });
-	
+
 	filter(ip_adrr,1);
 	filter(ip_adrr,46, 70);
 	filter_any(ip_adrr,46);
