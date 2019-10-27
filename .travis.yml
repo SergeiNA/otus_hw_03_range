@@ -6,7 +6,11 @@ addons:
     packages:
     - libboost-test-dev
     - libspdlog-dev
-    - conan-dev
+install:
+# Install conan
+  - pip install conan
+# Automatic detection of your arch, compiler, etc.
+  - conan user
 script:
 - conan install .
 - cmake .
