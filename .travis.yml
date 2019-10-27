@@ -6,11 +6,12 @@ addons:
     packages:
     - libboost-test-dev
     - libspdlog-dev
+    - conan-dev
 script:
 - conan install .
 - cmake .
 - cmake --build .
-- cmake --build . --target test
+# - cmake --build . --target test
 - cmake --build . --target package
 deploy:
   provider: script
