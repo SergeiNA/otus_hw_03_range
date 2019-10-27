@@ -57,7 +57,7 @@ IP_addr get_ip_addr(IP_addr_raw ip_addr_raw) {
 }
 
 
-IP_pool read_ip_addr(std::istream& is) {
+IP_pool read_ip_addr(std::istream& is = std::cin) {
 	IP_pool ip_pool;
 
 	for (std::string line; std::getline(is, line);)
