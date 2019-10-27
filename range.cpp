@@ -120,7 +120,8 @@ int main()
 	auto ip_adrr = read_ip_addr();
 
 	sort(ip_adrr, std::greater<IP_addr>());
-
+	for_each(ip_adrr, [](IP_addr c) { std::cout << c << '\n'; });
+	
 	filter(ip_adrr,1);
 	filter(ip_adrr,46, 70);
 	filter_any(ip_adrr,46);
