@@ -71,7 +71,7 @@ IP_pool read_ip_addr(std::istream& is = std::cin) {
 template<typename... Args>
 void setBoundary(IP_addr& lb, Args... args) {
 	size_t i = 0;
-	(void(lb[i++] = args), ...);
+	(...,void(lb[i++] = args));
 }
 
 template<typename... Args>
