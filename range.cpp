@@ -6,7 +6,6 @@
 #include <iterator>
 #include <fstream>
 
-//using std::cout;
 using namespace ranges;
 
 const size_t IP_ADDR_SZ = 4;
@@ -69,35 +68,31 @@ IP_pool read_ip_addr(std::istream& is = std::cin) {
 }
 
 
-void filter(const IP_pool& ip_pool, const Byte& byte) {
-	IP_addr lb_ip = { byte,255,255,255 };
-	IP_addr ub_ip = { byte,0,0,0 };
-
-	auto lb_indx = distance(ip_pool.cbegin(), lower_bound(ip_pool, lb_ip,
-		[](const IP_addr& ip, const IP_addr& ip_r) {
-			return ip > ip_r;
-		}));
-
-	auto ub_indx = distance(ip_pool.cbegin(), upper_bound(ip_pool, ub_ip,
-		[](const IP_addr& ip_r, const IP_addr& ip) {
-			return ip_r > ip;
-		}));
-
-	for_each(ip_pool | view::slice(lb_indx, ub_indx)
-		, [](IP_addr c) { std::cout << c << '\n'; });
-
+template<typename... Args>
+void setBoundary(IP_addr& lb, Args... args) {
+	size_t i = 0;
+	(void(lb[i++] = args), ...);
 }
 
-void filter(const IP_pool& ip_pool, const Byte& byte1, const Byte& byte2) {
-	IP_addr lb_ip = { byte1,byte2,255,255 };
-	IP_addr ub_ip = { byte1,byte2,0,0 };
+template<typename... Args>
+void filter(const IP_pool& ip_pool, Args... args) {
+	if (ip_pool.empty())
+		return;
+	if (sizeof...(args) > IP_ADDR_SZ)
+		throw std::runtime_error("filter: to many args");
 
-	auto lb_indx = distance(ip_pool.cbegin(), lower_bound(ip_pool, lb_ip,
+	IP_addr lb_addr{ 255,255,255,255 };
+	IP_addr ub_addr{ 0,0,0,0 };
+
+	setBoundary(lb_addr, args...);
+	setBoundary(ub_addr, args...);
+
+	auto lb_indx = distance(ip_pool.begin(), lower_bound(ip_pool, lb_addr,
 		[](const IP_addr& ip, const IP_addr& ip_r) {
 			return ip > ip_r;
 		}));
 
-	auto ub_indx = distance(ip_pool.cbegin(), upper_bound(ip_pool, ub_ip,
+	auto ub_indx = distance(ip_pool.begin(), upper_bound(ip_pool, ub_addr,
 		[](const IP_addr& ip_r, const IP_addr& ip) {
 			return ip_r > ip;
 		}));
